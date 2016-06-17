@@ -1,0 +1,6 @@
+# backup file.
+*~
+*.swp
+
+# tmux settings
+tmux-powerline

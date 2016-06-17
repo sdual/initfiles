@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mysql.server start
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+redis-server /usr/local/etc/redis.conf > /dev/null 2>&1 &
+/usr/local/opt/memcached/bin/memcached > /dev/null 2>&1 &
+#java -Djava.library.path=~/dynamodb_local_2015-04-27_1.0/DynamoDBLocal_lib -jar ~/dynamodb_local_2015-04-27_1.0/DynamoDBLocal.jar > /dev/null 2>&1 &
+/usr/local/bin/dynamodb-local -sharedDb > /dev/null 2>&1 &
