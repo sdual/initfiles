@@ -48,9 +48,12 @@
 (show-paren-mode 1)
 
 
-;; set themes 'monokai'
+;; load theme'
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 (load-theme 'monokai t)
+;(load-theme 'color-theme-sanityinc-tomorrow t nil)
+;(load-theme 'sanityinc-tomorrow-night t))
+
 
 ;;;; mode-compile
 (autoload 'mode-compile "mode-compile"
@@ -147,3 +150,8 @@
 ;; sql indent
 (eval-after-load "sql"
   '(load-library "sql-indent"))
+
+;; markdown mode
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+
+(setq auto-mode-alist (cons '("\\.md" . markdown-mode) auto-mode-alist))
