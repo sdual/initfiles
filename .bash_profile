@@ -1,6 +1,6 @@
 alias ls='ls -G'
 alias cp='cp -i'
-alias rm='rm -v'
+alias rm='rm -vi'
 alias ll='ls -l'
 alias pv='open -a Preview'
 alias firefox='open -a Firefox'
@@ -72,3 +72,7 @@ eval "$(pyenv init -)"
 
 # commnad which use for develop of dynalyst
 export PATH="/Users/tenoritama/conv-command:$PATH"
+
+# requre at importing pandas in ipython
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
