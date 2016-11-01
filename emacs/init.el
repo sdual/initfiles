@@ -54,6 +54,7 @@
 (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "'") 'skeleton-pair-insert-maybe)
 (setq skeleton-pair 1)
 
 ;; pair brackets
@@ -62,10 +63,8 @@
 
 ;; load theme'
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'monokai t)
-;(load-theme 'color-theme-sanityinc-tomorrow t nil)
-;(load-theme 'sanityinc-tomorrow-night t))
-
+(load-theme 'material t)
+;(load-theme 'monokai t)
 
 ;;;; mode-compile
 (autoload 'mode-compile "mode-compile"
@@ -153,3 +152,82 @@
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 
 (setq auto-mode-alist (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+;; use auto complete in emacs ipython notebook.
+(setq ein:use-auto-complete t)
+;; Or, to enable "superpack" (a little bit hacky improvements):
+;; (setq ein:use-auto-complete-superpack t)
+
+;; don't insert magic encoding commet on ruby file.
+(setq ruby-insert-encoding-magic-comment nil)
+
+;; quickrun short cut key.
+(global-set-key "\C-xr" 'quickrun)
+(global-set-key "\C-xy" 'quickrun-with-arg)
+(global-set-key "\C-cc" 'quickrun-compile-only)
+
+;; split horizontally.
+(setq split-width-threshold nil)
+
+;; yaml-mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
+(define-key yaml-mode-map "\C-m" 'newline-and-indent)
+
+
+;; eproject
+(defun ep-dirtree ()
+  (interactive)
+  (dirtree-in-buffer eproject-root t))
+
+; pyflakes
+(add-hook 'find-file-hook 'flymake-find-file-hook)
+(when (load "flymake" t)
+  (defun flymake-pyflakes-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "~/.pyenv/shims/pyflakes"  (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pyflakes-init)))
+; show message on mini-buffer
+(defun flymake-show-help ()
+  (when (get-char-property (point) 'flymake-overlay)
+    (let ((help (get-char-property (point) 'help-echo)))
+      (if help (message "%s" help)))))
+(add-hook 'post-command-hook 'flymake-show-help)
+
+; autopep8
+(add-to-list 'load-path "~/.emacs.d/elisp/pep8")
+(require 'py-autopep8)
+(add-hook 'before-save-hook 'py-autopep8-before-save)
+
+
+; insert encoding to python file at first line.
+(defun my-short-buffer-file-coding-system (&optional default-coding)
+  (let ((coding-str (format "%S" buffer-file-coding-system)))
+    (cond ((string-match "shift-jis" coding-str) 'shift_jis)
+          ((string-match "euc-jp" coding-str) 'euc-jp)
+          ((string-match "utf-8" coding-str) 'utf-8)
+          (t (or default-coding 'utf-8)))))
+
+(defun my-insert-file-local-coding ()
+  (interactive)
+  (save-excursion
+    (goto-line 2) (end-of-line) ; ２行目の行末の移動
+    (let ((limit (point)))
+      (goto-char (point-min))
+      (unless (search-forward "coding:" limit t)
+        (goto-char (point-min))
+        ;; #!で始まる場合２行目に記述
+        (when (and (< (+ 2 (point-min)) (point-max))
+                   (string= (buffer-substring (point-min) (+ 2 (point-min))) "#!"))
+          (unless (search-forward "\n" nil t)
+            (insert "\n")))
+        (let ((st (point)))
+          (insert (format "-*- coding: %S -*-\n" (my-short-buffer-file-coding-system)))
+          (comment-region st (point)))))))
+
+(add-hook 'python-mode-hook 'my-insert-file-local-coding)

@@ -2,18 +2,29 @@ alias ls='ls -G'
 alias cp='cp -i'
 alias rm='rm -vi'
 alias ll='ls -l'
-alias pv='open -a Preview'
+
+# use emacs daemon.
+#alias emacs='/usr/local/Cellar/emacs/24.5/Emacs.app/Contents/MacOS/Emacs -nw'
+alias emacs='emacsclient -nw -c -a ""'
+alias killemacs='emacsclient -e "(kill-emacs)"'
+
+# web browser.
 alias firefox='open -a Firefox'
-alias emacs='/usr/local/Cellar/emacs/24.5/Emacs.app/Contents/MacOS/Emacs -nw'
-alias finder='open -a finder'
-alias dropbox='open -a Dropbox'
+alias chrome='open -a Google\ Chrome'
+
+# MS Office.
 alias mw='open -a Microsoft\ Word'
 alias me='open -a Microsoft\ Excel'
 alias mp='open -a Microsoft\ PowerPoint'
+
+# other apps.
+alias pv='open -a Preview'
+alias finder='open -a finder'
+alias dropbox='open -a Dropbox'
 alias acroread='open -a Adobe\ Reader'
-alias chrome='open -a Google\ Chrome'
 alias mi='open -a mi'
 alias atom='open -a Atom'
+alias jpy='jupyter qtconsole --matplotlib=inline --style=monokai'
 
 source /usr/local/Cellar/git/2.7.0/share/zsh/site-functions/git-completion.bash
 source /usr/local/Cellar/git/2.7.0/etc/bash_completion.d/git-prompt.sh
@@ -76,3 +87,7 @@ export PATH="/Users/tenoritama/conv-command:$PATH"
 # requre at importing pandas in ipython
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+# python path
+export PYTHONPATH="/usr/local/Cellar/pyqt5/5.7/lib/python3.5/site-packages"
+export PYTHONPATH="/usr/local/Cellar/sip/4.18.1/lib/python3.5/site-packages:$PYTHONPATH"
