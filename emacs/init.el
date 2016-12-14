@@ -33,9 +33,23 @@
 ;compile a program if you type the meta-key and 'p'
 (global-set-key "\M-p" 'compile)
 
+;; disactivate whitespace-action in markdown file.
+(defvar delete-trailing-whitespece-before-save t)
+(defun my-delete-trailing-whitespace ()
+  (if delete-trailing-whitespece-before-save
+      (delete-trailing-whitespace)))
+(add-hook 'before-save-hook 'my-delete-trailing-whitespace)
+; 無効にしたいモードのhook
+(add-hook 'markdown-mode-hook
+          '(lambda ()
+             (set (make-local-variable 'delete-trailing-whitespece-before-save) nil)))
+
 
 ;; remove white scapse when save the file
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+
+
 
 ;; setting of keys
 ;; use ctr-h as backspace key
@@ -62,8 +76,12 @@
 
 
 ;; load theme'
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'material t)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'smyx t)
+;(load-theme 'hickey t)
+
+;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+;(load-theme 'material t)
 ;(load-theme 'monokai t)
 
 ;;;; mode-compile
@@ -97,6 +115,9 @@
 ;; not create a backup file
 (setq make-backup-files nil)
 (setq auto-save-default nil)
+
+; set tab width
+(setq default-tab-width 4)
 
 ;; setting of japanese
 (set-language-environment "Japanese")
@@ -150,7 +171,6 @@
 
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
-
 (setq auto-mode-alist (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;; use auto complete in emacs ipython notebook.
@@ -231,3 +251,23 @@
           (comment-region st (point)))))))
 
 (add-hook 'python-mode-hook 'my-insert-file-local-coding)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+; docker file mode
+(add-to-list 'load-path "~/.emacs.d/elisp/docker/")
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
