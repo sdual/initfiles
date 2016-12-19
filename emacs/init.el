@@ -271,3 +271,8 @@
 (add-to-list 'load-path "~/.emacs.d/elisp/docker/")
 (require 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
+
+;; flymake for haskell.
+(require 'flymake-haskell-multi) ;; not needed if installed via package
+(add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
