@@ -4,7 +4,6 @@ alias rm='rm -vi'
 alias ll='ls -l'
 
 # use emacs daemon.
-#alias emacs='/usr/local/Cellar/emacs/24.5/Emacs.app/Contents/MacOS/Emacs -nw'
 alias emacs='emacsclient -nw -c -a ""'
 alias killemacs='emacsclient -e "(kill-emacs)"'
 
@@ -26,8 +25,8 @@ alias mi='open -a mi'
 alias atom='open -a Atom'
 alias jpy='jupyter qtconsole --matplotlib=inline --style=monokai'
 
-source /usr/local/Cellar/git/2.7.0/share/zsh/site-functions/git-completion.bash
-source /usr/local/Cellar/git/2.7.0/etc/bash_completion.d/git-prompt.sh
+source /usr/local/Cellar/git/2.11.0/share/zsh/site-functions/git-completion.bash
+source /usr/local/Cellar/git/2.11.0/etc/bash_completion.d/git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE=true
 export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[36m\]\h:\[\033[36m\]\W\[\033[m\]\$(__git_ps1)\[\033[00m\]\$ "
 export CLICOLOR=1
@@ -84,7 +83,7 @@ eval "$(pyenv init -)"
 # commnad which use for develop of dynalyst
 export PATH="/Users/tenoritama/conv-command:$PATH"
 
-# requre at importing pandas in ipython
+# require at importing pandas in ipython
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
