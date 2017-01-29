@@ -44,13 +44,6 @@
           '(lambda ()
              (set (make-local-variable 'delete-trailing-whitespece-before-save) nil)))
 
-
-;; remove white scapse when save the file
-;(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-
-
-
 ;; setting of keys
 ;; use ctr-h as backspace key
 (global-set-key "\C-h" 'delete-backward-char)
@@ -224,6 +217,15 @@
 (require 'py-autopep8)
 (add-hook 'before-save-hook 'py-autopep8-before-save)
 
+;; change max line length to 160.
+(setq py-autopep8-options '("--max-line-length=160"))
+
+;; python jedi
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
+(setq jedi:server-args
+	  '("--sys-path" "~/.pyenv/versions/3.5.2/envs/experiments/lib/python3.5/site-packages"))
 
 ; insert encoding to python file at first line.
 (defun my-short-buffer-file-coding-system (&optional default-coding)
@@ -258,7 +260,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default))))
+	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default)))
+ '(package-selected-packages
+   (quote
+	(jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -266,12 +271,10 @@
  ;; If there is more than one, they won't work right.
  )
 
-
 ; docker file mode
 (add-to-list 'load-path "~/.emacs.d/elisp/docker/")
 (require 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-
 
 ;; flymake for haskell.
 (require 'flymake-haskell-multi) ;; not needed if installed via package

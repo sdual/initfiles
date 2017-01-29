@@ -69,7 +69,8 @@ export CLASSPATH=/Library/Java/Extensions/
 export SCALA_HOME=/usr/local/opt/scala/libexec/
 
 #rbenv
-eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # 'go root' and 'go path'
 export GOROOT=/usr/local/opt/go/libexec
@@ -90,3 +91,13 @@ export LANG=en_US.UTF-8
 # python path
 export PYTHONPATH="/usr/local/Cellar/pyqt5/5.7/lib/python3.5/site-packages"
 export PYTHONPATH="/usr/local/Cellar/sip/4.18.1/lib/python3.5/site-packages:$PYTHONPATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f /Users/tenoritama/google-cloud-sdk/path.bash.inc ]; then
+  source '/Users/tenoritama/google-cloud-sdk/path.bash.inc'
+fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f /Users/tenoritama/google-cloud-sdk/completion.bash.inc ]; then
+  source '/Users/tenoritama/google-cloud-sdk/completion.bash.inc'
+fi
