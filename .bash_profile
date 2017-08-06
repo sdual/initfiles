@@ -74,7 +74,7 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # 'go root' and 'go path'
 export GOROOT=/usr/local/opt/go/libexec
-export GOPATH=$HOME/.go
+export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
 # pyenv
@@ -101,3 +101,15 @@ fi
 if [ -f /Users/tenoritama/google-cloud-sdk/completion.bash.inc ]; then
   source '/Users/tenoritama/google-cloud-sdk/completion.bash.inc'
 fi
+
+# path for opencv3
+export PATH="/usr/local/opt/opencv3/bin:$PATH"
+
+export PATH="/usr/local/bin:$PATH"
+
+# hub command.
+eval "$(hub alias -s)"
+
+# plenv
+export PATH="$HOME/.plenv/bin:$PATH"
+eval "$(plenv init -)"

@@ -25,7 +25,7 @@
 (define-key ac-complete-mode-map "\C-p" 'ac-previous)
 
 ;; use gocode (go get -u github.com/nsf/gocode) my gopath is '$HOME/.go'
-(add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs")
+(add-to-list 'load-path "~/go/src/github.com/nsf/gocode/emacs")
 (require 'go-autocomplete)
 (require 'auto-complete-config)
 (ac-config-default)
@@ -225,15 +225,22 @@
 (setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
 (setq jedi:server-args
-	  '("--sys-path" "~/.pyenv/versions/3.5.2/envs/experiments/lib/python3.5/site-packages"))
+	  '("--sys-path" "~/.pyenv/versions/3.6.0/envs/default36/lib/python3.6/site-packages"))
 
 ; insert encoding to python file at first line.
-(defun my-short-buffer-file-coding-system (&optional default-coding)
-  (let ((coding-str (format "%S" buffer-file-coding-system)))
-    (cond ((string-match "shift-jis" coding-str) 'shift_jis)
-          ((string-match "euc-jp" coding-str) 'euc-jp)
-          ((string-match "utf-8" coding-str) 'utf-8)
-          (t (or default-coding 'utf-8)))))
+;(defun my-short-buffer-file-coding-system (&optional default-coding)
+;  (let ((coding-str (format "%S" buffer-file-coding-system)))
+;    (cond ((string-match "shift-jis" coding-str) 'shift_jis)
+;          ((string-match "euc-jp" coding-str) 'euc-jp)
+;          ((string-match "utf-8" coding-str) 'utf-8)
+;      (t (or default-coding 'utf-8)))))
+
+
+; python import sort.
+(require 'pyimpsort)
+(eval-after-load 'python
+  '(define-key python-mode-map "\C-c\C-u" #'pyimpsort-buffer))
+
 
 (defun my-insert-file-local-coding ()
   (interactive)
@@ -263,7 +270,7 @@
 	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default)))
  '(package-selected-packages
    (quote
-	(jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
+	(protobuf-mode neotree pyimpsort cython-mode ac-php jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -279,3 +286,38 @@
 ;; flymake for haskell.
 (require 'flymake-haskell-multi) ;; not needed if installed via package
 (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+
+;; braket pair.'
+(electric-pair-mode 1)
+
+;; c++
+(require 'cc-mode)
+(setq c-default-style "k&r")
+(add-hook 'c-mode-common-hook
+     	  '(lambda ()
+             (progn
+               (c-toggle-hungry-state 1)
+               (setq c-basic-offset 4 indent-tabs-mode nil))))
+
+(setq auto-mode-alist
+      (append
+       '(("\\.hpp$" . c++-mode)
+         ("\\.h$"   . c++-mode)
+         ) auto-mode-alist))
+
+
+;; ac-php
+(require 'cl)
+(add-hook 'php-mode-hook
+            '(lambda ()
+               (auto-complete-mode t)
+               (require 'ac-php)
+               (setq ac-sources  '(ac-source-php ) )
+               (yas-global-mode 1)
+               (define-key php-mode-map  (kbd "C-]") 'ac-php-find-symbol-at-point)   ;goto define
+               (define-key php-mode-map  (kbd "C-t") 'ac-php-location-stack-back   ) ;go back
+               ))
+
+;; golang flymake
+(add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
