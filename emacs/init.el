@@ -270,7 +270,7 @@
 	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default)))
  '(package-selected-packages
    (quote
-	(protobuf-mode neotree pyimpsort cython-mode ac-php jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
+	(popwin direx protobuf-mode neotree pyimpsort cython-mode ac-php jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -321,3 +321,13 @@
 ;; golang flymake
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 (require 'go-flymake)
+
+
+;; direx and popwin
+(require 'popwin)
+(popwin-mode 1)
+
+(require 'direx)
+(push '(direx:direx-mode :position left :width 25 :dedicated t)
+      popwin:special-display-config)
+(global-set-key (kbd "C-x C-k") 'direx:jump-to-directory-other-window)
