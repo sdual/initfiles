@@ -71,7 +71,7 @@
 ;; load theme'
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'smyx t)
-;(load-theme 'hickey t)
+;(load-theme 'odersky t)
 
 ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;(load-theme 'material t)
@@ -220,12 +220,29 @@
 ;; change max line length to 160.
 (setq py-autopep8-options '("--max-line-length=160"))
 
-;; python jedi
+;; python mode.
+(require 'python-mode)
+(setq auto-mode-alist (cons '("\\.py\\'" . python-mode) auto-mode-alist))
+
+(require 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
-(setq jedi:server-args
-	  '("--sys-path" "~/.pyenv/versions/3.6.0/envs/default36/lib/python3.6/site-packages"))
+(setq ac-sources
+      (delete 'ac-source-words-in-same-mode-buffers ac-sources)) ;; only use auto-completion of jedi.
+(add-to-list 'ac-sources 'ac-source-filename)
+(add-to-list 'ac-sources 'ac-source-jedi-direct)
+(define-key python-mode-map "\C-ct" 'jedi:goto-definition)
+
+(require 'virtualenvwrapper)
+(require 'auto-virtualenvwrapper)
+(add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
+
+;; python jedi
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:setup-keys t)
+;; (setq jedi:complete-on-dot t)
+;; (setq jedi:server-args
+;;       '("--sys-path" "~/.pyenv/versions/3.6.0/envs/default36/lib/python3.6/site-package"))
 
 ; insert encoding to python file at first line.
 ;(defun my-short-buffer-file-coding-system (&optional default-coding)
@@ -258,25 +275,6 @@
         (let ((st (point)))
           (insert (format "-*- coding: %S -*-\n" (my-short-buffer-file-coding-system)))
           (comment-region st (point)))))))
-
-(add-hook 'python-mode-hook 'my-insert-file-local-coding)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-	("6d1977ebe72065bf27f34974a9e5cb5dc0a7f296804376fad412d981dee7a7e4" "a81bc918eceaee124247648fc9682caddd713897d7fd1398856a5b61a592cb62" default)))
- '(package-selected-packages
-   (quote
-	(popwin direx protobuf-mode neotree pyimpsort cython-mode ac-php jedi nyan-mode yaml-mode sql-indent quickrun py-autopep8 powerline monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree color-theme-sanityinc-tomorrow cl-generic auto-complete))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ; docker file mode
 (add-to-list 'load-path "~/.emacs.d/elisp/docker/")
@@ -331,3 +329,35 @@
 (push '(direx:direx-mode :position left :width 25 :dedicated t)
       popwin:special-display-config)
 (global-set-key (kbd "C-x C-k") 'direx:jump-to-directory-other-window)
+
+
+;; use space for auto indent.
+(setq-default indent-tabs-mode nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (auto-virtualenvwrapper virtualenvwrapper yaml-mode sql-indent quickrun python-mode pyimpsort py-autopep8 protobuf-mode powerline popwin neotree monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree direx cython-mode color-theme-sanityinc-tomorrow cl-generic ac-php))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+;; flymake for java.
+(require 'flymake)
+(add-hook 'java-mode-hook 'flymake-mode-on)
+
+(defun my-java-flymake-init ()
+  (list "javac" (list (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-with-folder-structure))))
+
+(add-to-list 'flymake-allowed-file-name-masks '("\\.java$" my-java-flymake-init flymake-simple-cleanup))

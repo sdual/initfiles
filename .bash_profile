@@ -25,6 +25,11 @@ alias mi='open -a mi'
 alias atom='open -a Atom'
 alias jpy='jupyter qtconsole --matplotlib=inline --style=monokai'
 
+# tmp
+alias bzlbuild='bazel build --incompatible_comprehension_variables_do_not_leak=false --incompatible_disallow_set_constructor=false'
+alias bzlrun='bazel run --incompatible_comprehension_variables_do_not_leak=false --incompatible_disallow_set_constructor=false'
+alias bzltest='bazel test --incompatible_comprehension_variables_do_not_leak=false --incompatible_disallow_set_constructor=false'
+
 source /usr/local/Cellar/git/2.11.0/share/zsh/site-functions/git-completion.bash
 source /usr/local/Cellar/git/2.11.0/etc/bash_completion.d/git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE=true
@@ -61,6 +66,9 @@ export PATH=/Users/tenoritama:$PATH
 
 #apache installed using homebrew packege manager
 export PATH=/usr/local/sbin:$PATH
+
+# java home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
 
 # java class path
 export CLASSPATH=/Library/Java/Extensions/
@@ -113,3 +121,9 @@ eval "$(hub alias -s)"
 # plenv
 export PATH="$HOME/.plenv/bin:$PATH"
 eval "$(plenv init -)"
+
+# kubectl bash completion
+#source ~/.kubecompletion
+
+#alias clang-omp='/usr/local/opt/llvm/bin/clang -fopenmp -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
+#alias clang-omp++='/usr/local/opt/llvm/bin/clang++ -fopenmp -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib'
