@@ -33,6 +33,10 @@
 ;compile a program if you type the meta-key and 'p'
 (global-set-key "\M-p" 'compile)
 
+;; default background color
+(set-face-background 'default "#282828")
+
+
 ;; disactivate whitespace-action in markdown file.
 (defvar delete-trailing-whitespece-before-save t)
 (defun my-delete-trailing-whitespace ()
@@ -48,10 +52,11 @@
 ;; use ctr-h as backspace key
 (global-set-key "\C-h" 'delete-backward-char)
 
-
 ;; setting of display
 ;; display line number
 (global-linum-mode t)
+(custom-set-faces
+ '(linum ((t (:inherit (shadow default) :background "#282828")))))
 
 ;; dirtree
 (require 'dirtree)
@@ -69,9 +74,12 @@
 
 
 ;; load theme'
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (load-theme 'smyx t)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'smyx t)
+(load-theme 'dracula t)
 ;(load-theme 'odersky t)
+;(load-theme 'hickey t)
 
 ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;(load-theme 'material t)
@@ -231,18 +239,18 @@
       (delete 'ac-source-words-in-same-mode-buffers ac-sources)) ;; only use auto-completion of jedi.
 (add-to-list 'ac-sources 'ac-source-filename)
 (add-to-list 'ac-sources 'ac-source-jedi-direct)
-(define-key python-mode-map "\C-ct" 'jedi:goto-definition)
+(define-key python-mode-map "\C-cj" 'jedi:goto-definition)
 
 (require 'virtualenvwrapper)
 (require 'auto-virtualenvwrapper)
 (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
 
 ;; python jedi
-;; (add-hook 'python-mode-hook 'jedi:setup)
-;; (setq jedi:setup-keys t)
-;; (setq jedi:complete-on-dot t)
-;; (setq jedi:server-args
-;;       '("--sys-path" "~/.pyenv/versions/3.6.0/envs/default36/lib/python3.6/site-package"))
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
+(setq jedi:server-args
+      '("--sys-path" "~/.pyenv/versions/3.6.0/envs/default36/lib/python3.6/site-package"))
 
 ; insert encoding to python file at first line.
 ;(defun my-short-buffer-file-coding-system (&optional default-coding)
@@ -340,7 +348,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auto-virtualenvwrapper virtualenvwrapper yaml-mode sql-indent quickrun python-mode pyimpsort py-autopep8 protobuf-mode powerline popwin neotree monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree direx cython-mode color-theme-sanityinc-tomorrow cl-generic ac-php))))
+    (dracula-theme auto-virtualenvwrapper virtualenvwrapper yaml-mode sql-indent quickrun python-mode pyimpsort py-autopep8 protobuf-mode powerline popwin neotree monokai-theme markdown-mode helm haskell-mode geiser flymake-haskell-multi ensime dirtree direx cython-mode color-theme-sanityinc-tomorrow cl-generic ac-php))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
